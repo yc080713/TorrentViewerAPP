@@ -16,6 +16,17 @@ android {
         versionName = "1.0"
     }
 
+    // 使用仓库内固定的调试密钥签名，保证本地与 GitHub Actions 构建出同一签名，
+    // 这样不同版本之间可以覆盖升级（详见 README「签名说明」）。
+    signingConfigs {
+        getByName("debug") {
+            storeFile = rootProject.file("keystore/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

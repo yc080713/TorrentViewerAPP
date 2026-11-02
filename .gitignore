@@ -23,3 +23,6 @@ Thumbs.db
 *.jks
 *.keystore
 keystore.properties
+
+# 例外：项目固定的调试签名密钥（CI 与本地共用，保证签名一致）
+!keystore/debug.keystore
