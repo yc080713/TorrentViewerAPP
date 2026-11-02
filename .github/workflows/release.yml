@@ -33,7 +33,7 @@ jobs:
           fi
           echo "sdkmanager=$SDKMGR"
           yes | "$SDKMGR" --licenses > /dev/null 2>&1 || true
-          "$SDKMGR" "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          "$SDKMGR" "platform-tools" "platforms;android-36" "build-tools;36.0.0" "build-tools;35.0.0"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -41,7 +41,9 @@ jobs:
           gradle-version: '8.13'
 
       - name: Build debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace
+        run: |
+          set -o pipefail
+          gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee "$RUNNER_TEMP/build.log"
 
       - name: Prepare artifact
         run: |
@@ -75,3 +77,15 @@ jobs:
             - 包名：`com.torrentviewer.app`
             - 最低支持：Android 7.0（API 24）
             - 首次启动需授予「所有文件访问权限」
+
+      # 失败时把构建日志推到 ci-log 分支，便于排查（无需 Actions 读取权限）
+      - name: Publish build log on failure
+        if: failure()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan ci-log 2>/dev/null || git checkout ci-log
+          cp "$RUNNER_TEMP/build.log" build-log.txt
+          git add -f build-log.txt
+          git commit -m "ci: build log for ${GITHUB_SHA::7}" || true
+          git push -f origin ci-log
