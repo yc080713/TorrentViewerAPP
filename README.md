@@ -1,5 +1,7 @@
 # TorrentViewer · 种子查看器
 
+[![Build & Release](https://github.com/yc080713/TorrentViewerAPP/actions/workflows/release.yml/badge.svg)](https://github.com/yc080713/TorrentViewerAPP/actions/workflows/release.yml)
+
 一个用来查看 `.torrent` 种子文件详细信息的 Android 应用。
 
 Kotlin + Jetpack Compose（Material3），单 Activity + 手写 bencode 解析，无第三方种子解析依赖。
@@ -17,6 +19,38 @@ Kotlin + Jetpack Compose（Material3），单 Activity + 手写 bencode 解析�
 - **外部调用**：从 MT 管理器等文件管理器打开 `.torrent` 时，只弹出半透明解析弹窗，关闭后直接回到调用方应用
 - **设置**：莫奈取色开关、跟随系统深色开关（可手动指定明暗）、权限检查、弹窗模糊压暗开关
 - **磁力跳转**：`打开磁力链接` 通过 `ACTION_VIEW` 调起系统中支持 `magnet:` 的应用
+
+## 下载
+
+最新安装包见 [Releases](https://github.com/yc080713/TorrentViewerAPP/releases)。
+
+- 下载 `TorrentViewer-vX.Y.Z.apk` 安装即可
+- 首次启动会引导授予「所有文件访问权限」
+
+## 自动构建与发布
+
+仓库已配置 GitHub Actions（`.github/workflows/release.yml`）：
+
+| 触发方式 | 行为 |
+|---|---|
+| 推送到 `main` | 编译并上传 APK 作为构建产物（不发版） |
+| 推送 tag（如 `v1.0.1`） | 编译 + 自动创建 Release 并附上 APK |
+| 手动触发（Actions 页面） | 同推送到 `main` |
+
+发布新版本：
+
+```bash
+git tag -a v1.0.1 -m "v1.0.1"
+git push origin v1.0.1
+```
+
+## 签名说明
+
+仓库内 `keystore/debug.keystore` 是**公开的调试级密钥**，本地构建与 GitHub Actions 都使用它签名，
+因此不同版本之间可以覆盖升级，不会出现「签名不一致，无法安装」。
+
+> ⚠️ 该密钥公开，任何人都可以签出同包名、同签名的 APK，**不适合正式上架应用商店**。
+> 如需正式发布，请自行生成私有 keystore，并通过仓库 Secrets 注入到 CI 中使用。
 
 ## 环境要求
 
