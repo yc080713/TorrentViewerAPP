@@ -1,0 +1,2 @@
+# TorrentViewerAPP
+查看安卓设备上的torrent文件详细信息并打开为磁力连接
