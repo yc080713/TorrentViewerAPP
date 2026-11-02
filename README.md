@@ -4,6 +4,9 @@
 
 Kotlin + Jetpack Compose（Material3），单 Activity + 手写 bencode 解析，无第三方种子解析依赖。
 
+该项目完全由DeepSeek-V4.1-Flash生成
+项目灵感来源是115网盘APP无法直接打开我手机上的.torrent种子文件进行云下载，于是就让大肥鱼写了这么个软件来解决我的痛点
+
 ## 功能
 
 - **文件管理器**：启动即进入，可逐级浏览外部存储，支持多选、复制、剪切、粘贴
